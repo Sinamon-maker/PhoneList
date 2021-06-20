@@ -12,6 +12,7 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx']
   },
+  devtool: 'eval-source-map',
   devServer: {
 hot: true,
 contentBase: resolve(__dirname, 'dist'),
@@ -21,8 +22,18 @@ index: 'index.html',
 overlay: {
   warnings: false,
   errors: true
-}
+},
+    proxy: [
+      {
+        context: ['/api', '/auth', '/ws'],
+        target: `http://localhost:${process.env.PORT || 8090}`,
+        secure: false,
+        changeOrigin: true,
+        ws: (process.env.ENABLE_SOCKETS || false)
+      }
+    ]
   },
+
   module: {
     rules: [
       {
