@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateCode, phoneToRedux } from "../redux/reducers/phone";
-import "./hom.scss";
+import { updateCode, phoneToReduxViaSocket } from "../redux/reducers/phone";
+import Error from "./utils/error";
+import "./phone.scss";
+
+const countryCodes = [
+  { country: "Russia", code: "+7" },
+  { country: "Poland", code: "+48" },
+  { country: "Ucraine", code: "+380" },
+];
 
 const Phones = () => {
   const code = useSelector((s) => s.phone.code);
-    const list = useSelector((s) => s.phone.list);
+  const list = useSelector((s) => s.phone.list);
   const dispatch = useDispatch();
 
   const [number, setNumber] = useState("");
-  const [error, setErrorMessage] = useState("")
+  const [error, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    dispatch(updateCode(countryCodes[0].code));
+  }, []);
 
   const handleChange = (event) => {
     if (/\d+/.test(Number(event.target.value))) {
@@ -18,19 +29,19 @@ const Phones = () => {
   };
 
   const handleSubmit = (e) => {
-
-e.preventDefault();
-if (number.length < 4 || number.length > 10){
-  setErrorMessage("Phone number should be between 3 and 10 characters")
-  }
-  dispatch(phoneToRedux(number))
-  }
+    e.preventDefault();
+    if (number.length < 4 || number.length > 10) {
+      setErrorMessage("Phone number should be between 3 and 10 characters");
+    } else {
+      setErrorMessage("");
+      dispatch(phoneToReduxViaSocket(number));
+    }
+  };
 
   return (
-    <div>
-
+    <div className="input-group">
       code {code}
-            <form className="input-group" onSubmit = {handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <select
           onChange={(event) => {
             dispatch(updateCode(event.target.value));
@@ -48,12 +59,16 @@ if (number.length < 4 || number.length > 10){
           onChange={handleChange}
         />
         <button type="submit">SEND</button>
-        <p className = "error">
 
-        {error}
-        </p>
-       <div>{list.map(it=> <li key = {it._id}>{it.phone}</li>)}</div>
+        <Error error={error} onError={handleSubmit} />
       </form>
+      <ul className="list-phone">
+        {list.map((it) => (
+          <li className="list-phone__list" key={it._id}>
+            {it.phone}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

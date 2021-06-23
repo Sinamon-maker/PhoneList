@@ -8,9 +8,16 @@ h1{
   font-size: 4rem;
 }
 
-form{
+.input-group{
   width: 50vh;
   margin: 2rem auto;
+  display:flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+form{
+
 }
 select{
   font-size: 1.5rem;
@@ -41,6 +48,7 @@ input :hover{
 
 button{
   border: 0;
+  outline: none;
   padding: 1rem 2rem;
   border-radius: 1rem;
   cursor: pointer;
@@ -57,3 +65,7 @@ button:hover{
   color: red;
   opacity: 0.5;
 }
+
+ul{
+  list-style: none;
+  }

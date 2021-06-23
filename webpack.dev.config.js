@@ -1,4 +1,5 @@
 const { resolve } = require('path')
+const fs = require('fs')
 const CopyWebpackPlugin=require('copy-webpack-plugin')
 const MiniCSSExtractPlugin=require('mini-css-extract-plugin')
 const config = {
@@ -13,10 +14,11 @@ const config = {
     extensions: ['.js', '.jsx']
   },
   devtool: 'eval-source-map',
+  target: 'web',
   devServer: {
 hot: true,
 contentBase: resolve(__dirname, 'dist'),
-port: 8080,
+port: 3080,
 host: 'localhost',
 index: 'index.html',
 overlay: {
@@ -25,11 +27,11 @@ overlay: {
 },
     proxy: [
       {
-        context: ['/api', '/auth', '/ws'],
+        context: ['/api', '/auth', '/socket.io'],
         target: `http://localhost:${process.env.PORT || 8090}`,
         secure: false,
         changeOrigin: true,
-        ws: (process.env.ENABLE_SOCKETS || false)
+        ws: true
       }
     ]
   },
@@ -58,6 +60,7 @@ overlay: {
     ],
   },
   plugins: [
+
     new MiniCSSExtractPlugin({
       filename: 'css/main.css'
     }),

@@ -1,12 +1,15 @@
 import axios from 'axios'
+import {getSocket} from '../index'
 
 const UPDATE_CODE = 'UPDATE_CODE'
 const UPDATE_LIST = 'UPDATE_LIST'
+const CONNECT = 'CONNECT'
 
 const initialState = {
   testPhone: 1,
-  code: "+7",
-  list: []
+  code: "",
+  list: [],
+  message: ''
 }
 
 export default (state = initialState, action) => {
@@ -23,7 +26,13 @@ export default (state = initialState, action) => {
         list: [...state.list, action.phone]
       }
     }
-    default:
+    case CONNECT: {
+      return {
+        ...state,
+        message: action.data
+      }
+    }
+      default:
       return state
   }
 
@@ -37,9 +46,19 @@ export function phoneToRedux(phone) {
   return (dispatch, getState) => {
     const { code } = getState().phone
     axios.post('http://localhost:8090/api/v1/phone', { phone: `${code}${phone}` }).then(({ data }) => {
-      console.log("data", data)
+
       dispatch({ type: UPDATE_LIST, phone: data })
     })
   }
 
+}
+
+export function phoneToReduxViaSocket(phone) {
+  return (dispatch, getState) => {
+    const { code } = getState().phone
+    const data = { phone: `${code}${phone}`,
+      type: UPDATE_LIST}
+console.log(data, getSocket)
+    getSocket().emit('action', data )
+    }
 }
