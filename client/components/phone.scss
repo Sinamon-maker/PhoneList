@@ -1,71 +1,131 @@
-
-
-div {
-color: #000;
-}
-
-h1{
+h1 {
   font-size: 4rem;
 }
 
-.input-group{
-  width: 50vh;
-  margin: 2rem auto;
-  display:flex;
+.input-group {
+  margin: 4rem auto;
+  padding: 0;
+  width: 90%;
+}
+
+form {
+  margin: 10rem auto 0;
+  color: #48474d;
+}
+
+.input-group__content {
+  width: 100%;
+  display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
+  margin: 0 auto;
+  justify-content: space-between;
+  padding: 0 2rem;
 }
 
-form{
-
-}
-select{
-  font-size: 1.5rem;
-  padding: 0.5rem;
+select {
+  padding: 1rem 0 1rem 0.5rem;
   border: 0;
   outline: none;
   border-radius: 1rem;
   background-color: #fff;
+  color: #303033;
+  margin-bottom: 1rem;
 }
 
-input{
+input {
   border: none;
   outline: none;
   padding: 1rem 2rem;
   border-radius: 1rem;
+  color: #303033;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
-input:focus{
-
-box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);
-
+input:focus {
+  box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);
 }
 
-input :hover{
-
-
-}
-
-button{
+.btn {
   border: 0;
   outline: none;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
   cursor: pointer;
   box-shadow: 4px 4px 8px 4px rgba(34, 60, 80, 0.2);
-  background-color: rgb(50, 120, 185);
-  color: #fff;
 }
 
-button:hover{
+.btn-primary {
+  background-color: rgb(50, 120, 185);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+}
+.btn-primary:hover {
   background-color: rgb(58, 131, 199);
 }
 
-.error{
-  color: red;
-  opacity: 0.5;
+.input-group__content select,
+.input-group__content input,
+.input-group__content button {
+  font-size: 2rem;
 }
 
-ul{
-  list-style: none;
+@media screen and(min-width:768px) {
+  .input-group {
+    margin: 2rem auto;
+    padding: 0 4rem;
+    width: 70%;
   }
+
+  .input-group__content select,
+  .input-group__content input,
+  .input-group__content button {
+    font-size: 1.5rem;
+  }
+  select {
+    padding-right: 2rem;
+  }
+  button {
+    padding: 1rem 2rem;
+  }
+  .input-group__content {
+    flex-direction: row;
+  }
+}
+
+@media screen and(min-width:1024px) {
+  .input-group {
+    margin: 2rem auto;
+    padding: 0 4rem;
+    width: 50%;
+  }
+  select {
+    padding-right: 2rem;
+  }
+
+  .input-group__content {
+    flex-direction: row;
+  }
+}
+
+.error {
+  color: red;
+  opacity: 0.5;
+  padding-left: 2rem;
+}
+
+ul {
+  list-style: none;
+  font-size: 2rem;
+  margin: 2rem;
+  padding-left: 0;
+}
+
+.list-phone__list {
+  margin: 2rem 0;
+  padding-left: 2rem;
+}

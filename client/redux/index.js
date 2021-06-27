@@ -4,8 +4,6 @@ import { io } from "socket.io-client";
 import thunk from 'redux-thunk'
 import createRootReducer from './reducers'
 
-import socketActions from './sockets'
-import { Connection } from "mongoose";
 
 const middleware = [thunk]
 const initialState = {}

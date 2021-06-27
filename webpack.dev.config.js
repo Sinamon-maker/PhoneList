@@ -1,5 +1,4 @@
 const { resolve } = require('path')
-const fs = require('fs')
 const CopyWebpackPlugin=require('copy-webpack-plugin')
 const MiniCSSExtractPlugin=require('mini-css-extract-plugin')
 const config = {

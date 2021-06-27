@@ -1,74 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCode, phoneToReduxViaSocket } from "../redux/reducers/phone";
 import Error from "./utils/error";
+import Select from "./utils/select";
+import InputPhone from "./utils/input";
+import Button from "./utils/button";
+import List from "./utils/list";
+import { countryCodes } from "../../config.json";
 import "./phone.scss";
 
-const countryCodes = [
-  { country: "Russia", code: "+7" },
-  { country: "Poland", code: "+48" },
-  { country: "Ucraine", code: "+380" },
-];
-
 const Phones = () => {
-  const code = useSelector((s) => s.phone.code);
   const list = useSelector((s) => s.phone.list);
   const dispatch = useDispatch();
 
   const [number, setNumber] = useState("");
-  const [error, setErrorMessage] = useState("");
+  const [validate, setValidate] = useState(true);
 
   useEffect(() => {
     dispatch(updateCode(countryCodes[0].code));
   }, []);
 
-  const handleChange = (event) => {
-    if (/\d+/.test(Number(event.target.value))) {
-      setNumber(event.target.value);
+  const validateNumber = (entered) => {
+    if (entered.length > 3 && entered.length < 11) {
+      setValidate(true);
+    } else {
+      setValidate(false);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (number.length < 4 || number.length > 10) {
-      setErrorMessage("Phone number should be between 3 and 10 characters");
-    } else {
-      setErrorMessage("");
-      dispatch(phoneToReduxViaSocket(number));
-    }
+  const error = () =>
+    validate ? "" : "Phone number should be between 3 and 10 characters";
+
+  const onChangeCountryCode = (event) => {
+    dispatch(updateCode(event.target.value));
   };
+
+  const handleChange = useCallback(
+    (event) => {
+      if (
+        /^[0-9]+$/.test(event.target.value) ||
+        event.target.value.length === 0
+      ) {
+        const newNumber = event.target.value;
+        validateNumber(newNumber);
+        setNumber(newNumber);
+      }
+    },
+    [setNumber]
+  );
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (validate) {
+        dispatch(phoneToReduxViaSocket(number));
+        const newNumber = "";
+        setNumber(newNumber);
+      }
+    },
+    [setNumber, validate]
+  );
 
   return (
     <div className="input-group">
-      code {code}
       <form onSubmit={handleSubmit}>
-        <select
-          onChange={(event) => {
-            dispatch(updateCode(event.target.value));
-          }}
-        >
-          {" "}
-          <option value="{code}">{code}</option>
-          <option value="+3">+3</option>
-          <option value="+4">+4</option>{" "}
-        </select>
-        <input
-          className="input-group_phone"
-          type="phone"
-          value={number}
-          onChange={handleChange}
-        />
-        <button type="submit">SEND</button>
-
-        <Error error={error} onError={handleSubmit} />
+        <div className="input-group__content">
+          <Select countryCodes={countryCodes} onChange={onChangeCountryCode} />
+          <InputPhone value={number} onChange={handleChange} />
+          <Button validate={validate} />
+        </div>
+        <Error error={error()} onError={handleSubmit} />
       </form>
-      <ul className="list-phone">
-        {list.map((it) => (
-          <li className="list-phone__list" key={it._id}>
-            {it.phone}
-          </li>
-        ))}
-      </ul>
+      <List list={list} />
     </div>
   );
 };

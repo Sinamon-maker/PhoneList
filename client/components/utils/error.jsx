@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 import "../phone.scss";
 
-const Error = ({error, onError}) => {
+const Error = ({ error, onError }) => {
   return <p className="error">{error}</p>;
-}
+};
 
-export default Error;
+export default React.memo(Error);
